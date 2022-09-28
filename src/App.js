@@ -2,20 +2,13 @@ import './App.scss';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Content from './components/Wrapper/Wrapper';
-import { getSchema } from './API/getSchema';
+import { useState } from 'react';
+import schema from "./schema/schema.json"
 
 function App() {
-  console.log(getSchema())
-  async function getDataFromSchema(){
-    try{
-      const schemaData = await getSchema()
-      console.log(schemaData)
-    }catch(err){
-      console.log(err)
-    }
-  }
-
-  getDataFromSchema()
+  const [data, setData] = useState()
+  console.log(schema)
+  
   return (
     <div className="App">
       <Header />
