@@ -1,12 +1,16 @@
 import React from "react";
 import styles from "./Header.module.scss";
-import logo from "../../images/snapchat-logo.svg"
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
+import logo from "../../images/logo.svg"
 
 const Header = () => {
     return (
+        <div>
         <header className={styles.header}>
             <img src={logo} alt="ID Finance" className={styles.logo} />
         </header>
+        <Breadcrumbs />
+        </div>
     )
 }
 

@@ -3,7 +3,7 @@ import styles from "./Button.module.scss"
 
 const Button = ({...props}) => {
     return( 
-        <button onClick={props.validateSignUp} className={styles.button} type={props.buttonType}>{props.buttonName}</button>
+        <button onClick={props.handler} className={styles.button} type={props.buttonType}>{props.buttonName}</button>
     )
 }
 

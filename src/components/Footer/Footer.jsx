@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Footer.module.scss";
-import logo from "../../images/snapchat-logo.svg"
+import logo from "../../images/logo.svg"
 
 const Header = () => {
     return (
