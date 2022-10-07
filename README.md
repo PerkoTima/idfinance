@@ -1,10 +1,99 @@
-# Getting Started with Create React App
+# Тестовое задание FRONTEND Lab ID FINANCE
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Необходимо создать масштабируемый SPA регистрации с двумя шагами и неизменным url. Сайт должен быть адаптивным и корректно отображаться на разных устройствах. Приложение должно иметь понятный код и архитектуру.
 
-## Available Scripts
+## Требуемые технологии:
+* ReactJS
+* Redux / React Context
+* Styled components / scc modules (можно что-то другое)
+* Любой css фреймворк 
+* Можно использовать TypeScript
 
-In the project directory, you can run:
+### Условия следующие:
+
+1. Шапка и футер должны быть высотой не более 200px, содержать векторное лого и быть “приклеены” к верху и низу страницы соответственно.
+
+2. Под шапкой должны находится хлебные крошки, показывающие текущий этап прохождения регистрации (SignUpInfo / PersonalInfo).
+
+3. На элементах форм необходимо использовать controlled и uncontrolled компоненты.
+
+4. Переход на следующий шаг должен быть после валидации, которая хранится в JSON Schema (см. ниже, это stub на предполагаемый ответ сервера при инициализации приложения).
+
+5. Приложение должно работать при изменении JSON Schema (см. ниже).
+
+6. После заполнения анкеты отобразить модальное окно с заполненной информацией.
+
+### Содержание SignUpInfo:
+1. Mobile phone (маскированный инпут)
+2. Email (email инпут)
+3. Password (инпут пароль)
+4. Repeat Password (должно совпадать с Password)
+5. Next (кнопка для валидации и перехода на следующий этап)
+
+### Содержание PersonalInfo:
+1. First Name (текстовый инпут)
+2. Last Name (текстовый инпут)
+3. Sex (радиогруппа)
+4. Birthday (3 инпут формата DD MM YYYY)
+5. Your Favorite Ocean (селект, элементы приходят в JSON SCHEMA)
+6. Hobby (группа чекбоксов с возможностью выбора нескольких элементов, элементы приходят в JSON SCHEMA)
+7. Change SignUp Information (кнопка, позволяющая изменить данные с первого шага)
+8. Complete (кнопка завершения регистрации, по нажатию на которую показывается модальное окно с заполненной анкетой)
+
+
+JSON Schema:
+
+{
+    "firstName": {
+      "required": true,
+      "minLength": "2",
+      "maxLength": "30"
+    },
+    "lastName": {
+      "required": true,
+      "minLength": "2",
+      "maxLength": "30"
+    },
+    "mobilePhone": {
+      "required": true,
+      "regExp": "^\\+375\\d{9}$"
+    },
+    "password": {
+      "required": true,
+      "minLength": "8",
+      "maxLength": "20"
+    },
+    "email": {
+      "required": true,
+      "regExp": "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+    },
+    "birthday": {
+      "required": true,
+      "minAge": "18",
+      "maxAge": "90"
+    },
+    "ocean": {
+      "required": true,
+      "oneOf": [
+        "Atlantic",
+        "Pacific",
+        "Indian",
+        "Arctic"
+      ]
+    },
+    "hobby": {
+      "required": true,
+      "anyOf": [
+        "Sport",
+        "Beauty",
+        "IT",
+        "Pets"
+      ]
+    },
+    "sex": {
+      "required": true
+    }
+}
 
 ### `npm start`
 
@@ -13,58 +102,3 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
