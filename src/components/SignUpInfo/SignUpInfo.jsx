@@ -7,38 +7,25 @@ import { addSignUpInfoData } from "../../store/dataReducer";
 import { personalInfoStep } from "../../store/stepReducer";
 
 const SignUpInfo = () => {
-    const inputsFromSchema = schema
     
     const dispatch = useDispatch()
+    const phoneRegExp = (new RegExp(schema["mobilePhone"]["regExp"]))
+    const emailRegExp = (new RegExp(schema["email"]["regExp"]))
     const signUpInfoData = useSelector(state => state.data.signUpInfo)
     const [signUp, setSignUp] = useState(signUpInfoData)
-
+    const [errorPhone, setErrorPhone] = useState('')
+    const [errorEmail, setErrorEmail] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-
-    // const mask = (value) => {
-    //     let x = value.match(/d{0,9}/g);
-    //     console.log(x)
-    //     value = '+375'
-    //     // value = (!x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : ''));
-    //     return value
-    // }
 
     const validate = (e) => {
         e.preventDefault()
-        if(
-            signUp.password === repeatPassword
-            && (new RegExp(inputsFromSchema["mobilePhone"]["regExp"])).test(signUp.mobilePhone)
-            && (new RegExp(inputsFromSchema["email"]["regExp"])).test(signUp.email)
-        ){
+        !phoneRegExp.test(signUp.mobilePhone) ? setErrorPhone('Phone is not correct') : setErrorPhone('')
+        !emailRegExp.test(signUp.email) ? setErrorEmail('Email is not correct') : setErrorEmail('')
+        if(signUp.password === repeatPassword && phoneRegExp.test(signUp.mobilePhone) && emailRegExp.test(signUp.email)){
             dispatch(addSignUpInfoData(signUp))
             dispatch(personalInfoStep('personalInfo'))
-        }else{
-            if((new RegExp(inputsFromSchema["mobilePhone"]["regExp"])).test(signUp.mobilePhone)){
-                return 0
-            }
         }
     }
-
     return (
         <form onSubmit={validate} className={styles.sign_up_wrapper}>
 
@@ -48,33 +35,41 @@ const SignUpInfo = () => {
                     className={styles.input}
                     onChange={e => setSignUp({...signUp, mobilePhone: e.target.value})}
                     value={signUp.mobilePhone}
-                    required={inputsFromSchema["mobilePhone"]["required"]}
+                    required={schema["mobilePhone"]["required"]}
                     placeholder="+375XXXXXXXXX"
-                    type="phone"
+                    type="tel"
                 />
+                <div className={styles.error}>
+                    {errorPhone}
+                </div>
             </div>
-
+            
+            
             <div className={styles.input_wrapper}>
                 <label className={styles.label} htmlFor="email">Email</label>
                 <input
                     className={styles.input}
                     onChange={e => setSignUp({...signUp, email: e.target.value})}
                     value={signUp.email}
-                    required={inputsFromSchema["email"]["required"]}
+                    required={schema["email"]["required"]}
                     type="email"
                     placeholder="test@gmail.com"
                 />
+                <div className={styles.error}>
+                    {errorEmail}
+                </div>
             </div>
+            
 
             <div className={styles.input_wrapper}>
                 <label className={styles.label} htmlFor="password">Password</label>
                 <input
                     className={styles.input}
                     onChange={e => setSignUp({...signUp, password: e.target.value})}
-                    minLength={inputsFromSchema["password"]["minLength"]}
-                    maxLength={inputsFromSchema["password"]["maxLength"]}
+                    minLength={schema["password"]["minLength"]}
+                    maxLength={schema["password"]["maxLength"]}
                     value={signUp.password}
-                    required={inputsFromSchema["password"]["required"]}
+                    required={schema["password"]["required"]}
                     type="password"
                 />
             </div>
@@ -84,8 +79,8 @@ const SignUpInfo = () => {
                 <input 
                     className={styles.input}
                     onChange={e => setRepeatPassword(e.target.value)}
-                    minLength={inputsFromSchema["password"]["minLength"]}
-                    maxLength={inputsFromSchema["password"]["maxLength"]}
+                    minLength={schema["password"]["minLength"]}
+                    maxLength={schema["password"]["maxLength"]}
                     value={repeatPassword}
                     type="password"
                     required

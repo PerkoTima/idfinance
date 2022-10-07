@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 const Modal = () => {
 
     const userData = useSelector(state => state.data)
-    console.log(userData)
 
     return(
         <div className={styles.modal_wrapper}>

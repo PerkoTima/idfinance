@@ -7,8 +7,6 @@ import { modalStep, signUpStep } from "../../store/stepReducer";
 import { addPersonalInfoData } from "../../store/dataReducer";
 
 const PersonalInfo = () => {
-    const inputsFromSchema = schema
-
     const dispatch = useDispatch()
 
     const firstName = useRef()
@@ -17,17 +15,23 @@ const PersonalInfo = () => {
     const inputOcean = useRef()
     const [gender, setGender] = useState()
     const [hobby, setHobby] = useState([])
+    const [hobbyError, setHobbyError] = useState('')
     const validate = (e) => {
         e.preventDefault()
-        dispatch(addPersonalInfoData({
-            firstName: firstName.current.value,
-            lastName: lastName.current.value,
-            gender: gender,
-            birthday: inputDate.current.value,
-            ocean: inputOcean.current.value,
-            hobby: hobby
-        }))
-        dispatch(modalStep('modal'))
+
+        if(hobby.length <= 0){
+            setHobbyError('No items selected')
+        }else{
+            dispatch(addPersonalInfoData({
+                firstName: firstName.current.value,
+                lastName: lastName.current.value,
+                gender: gender,
+                birthday: inputDate.current.value,
+                ocean: inputOcean.current.value,
+                hobby: hobby
+            }))
+            dispatch(modalStep('modal'))
+        }
     }
 
     const backToSignUp = () => {
@@ -48,11 +52,11 @@ const PersonalInfo = () => {
                 <label className={styles.label} htmlFor="firstName">First Name</label>
                 <input
                     className={styles.input}
-                    required={inputsFromSchema["firstName"]["required"]}
+                    required={schema["firstName"]["required"]}
                     type="text"
                     placeholder="John"
-                    minLength={inputsFromSchema["firstName"]["minLength"]}
-                    maxLength={inputsFromSchema["firstName"]["maxLength"]}
+                    minLength={schema["firstName"]["minLength"]}
+                    maxLength={schema["firstName"]["maxLength"]}
                     ref={firstName}
                 />
             </div>
@@ -61,11 +65,11 @@ const PersonalInfo = () => {
                 <label className={styles.label} htmlFor="lastName">Last Name</label>
                 <input
                     className={styles.input}
-                    required={inputsFromSchema["lastName"]["required"]}
+                    required={schema["lastName"]["required"]}
                     type="text"
                     placeholder="Doe"
-                    minLength={inputsFromSchema["lastName"]["minLength"]}
-                    maxLength={inputsFromSchema["lastName"]["maxLength"]}
+                    minLength={schema["lastName"]["minLength"]}
+                    maxLength={schema["lastName"]["maxLength"]}
                     ref={lastName}
                 />
             </div>
@@ -81,7 +85,7 @@ const PersonalInfo = () => {
                             name="sex"
                             value="man"
                             onChange={e => setGender(e.target.value)}
-                            required={inputsFromSchema["sex"]["required"]}
+                            required={schema["sex"]["required"]}
                         />
                         <label className={styles.label} htmlFor="man">man</label>
                     </div>
@@ -104,7 +108,7 @@ const PersonalInfo = () => {
                 <input
                     className={styles.birthday}
                     ref={inputDate}
-                    required={inputsFromSchema["birthday"]["required"]}
+                    required={schema["birthday"]["required"]}
                     type="date"
                     defaultValue="2000-01-01"
                 />
@@ -117,15 +121,15 @@ const PersonalInfo = () => {
             }
             <div className={styles.select_wrapper}>
                 <p>Your Favorite Ocean</p>
-                <select required={inputsFromSchema["ocean"]["required"]} ref={inputOcean} >
-                    {inputsFromSchema["ocean"]["oneOf"].map((e, idx) => <option key={`${e}${idx}`} value={e}>{e}</option>)}
+                <select required={schema["ocean"]["required"]} ref={inputOcean} >
+                    {schema["ocean"]["oneOf"].map((e, idx) => <option key={`${e}${idx}`} value={e}>{e}</option>)}
                 </select>
             </div>
 
             <div className={styles.checkbox_wrapper}>
                 <p>Hobby</p>
                 <div className={styles.checkboxes_wrapper}>
-                {inputsFromSchema["hobby"]["anyOf"].map((el, idx) => 
+                {schema["hobby"]["anyOf"].map((el, idx) => 
                     <div key={`${el}${idx}`} className={styles.checkbox}>
                         <input
                             type="checkbox"
@@ -136,12 +140,10 @@ const PersonalInfo = () => {
                         />
                         <label htmlFor={`hobby${idx}`}>{el}</label>
                     </div>
-                )}
-                    {hobby.length <= 0 &&
-                        <span className={styles.error}>no item selected</span>
-                    }   
+                )}    
                 </div>
             </div>
+            <span className={styles.error}>{hobbyError}</span>
             <div className={styles.button_wrapper}>
                 <Button buttonName="Change SingUp" handler={backToSignUp}/>
                 <Button validateSignUp={validate} buttonName="Complete"/>
