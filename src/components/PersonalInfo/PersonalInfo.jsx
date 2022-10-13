@@ -19,7 +19,6 @@ const PersonalInfo = () => {
     const [birthdayError, setBirthdayError] = useState('')
     const [hobbyError, setHobbyError] = useState('')
     const validate = (e) => {
-        console.log(e)
         e.preventDefault()
         const under18 = new Date().getFullYear() - new Date(inputDate.current.value).getFullYear() < 18
         const over90 = new Date().getFullYear() - new Date(inputDate.current.value).getFullYear() > 90
@@ -28,7 +27,6 @@ const PersonalInfo = () => {
         if(over90) setBirthdayError('Your age is over 90')
         
         if(!hobby.length <= 0 && !under18 && !over90){
-            console.log(e)
             dispatch(addPersonalInfoData({
                 firstName: firstName.current.value,
                 lastName: lastName.current.value,
