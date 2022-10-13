@@ -31,7 +31,7 @@ const SignUpInfo = () => {
         }
     }
     return (
-        <form onSubmit={validate} noValidate className={styles.sign_up_wrapper}>
+        <form onSubmit={validate} className={styles.sign_up_wrapper}>
             <Input
                 id='mobilePhone'
                 label='Mobile Phone'
