@@ -5,6 +5,7 @@ import schema from '../../schema/schema.json'
 import { useDispatch } from "react-redux";
 import { modalStep, signUpStep } from "../../store/stepReducer";
 import { addPersonalInfoData } from "../../store/dataReducer";
+import Input from "../Input/Input";
 
 const PersonalInfo = () => {
     const dispatch = useDispatch()
@@ -15,13 +16,19 @@ const PersonalInfo = () => {
     const inputOcean = useRef()
     const [gender, setGender] = useState()
     const [hobby, setHobby] = useState([])
+    const [birthdayError, setBirthdayError] = useState('')
     const [hobbyError, setHobbyError] = useState('')
     const validate = (e) => {
+        console.log(e)
         e.preventDefault()
-
-        if(hobby.length <= 0){
-            setHobbyError('No items selected')
-        }else{
+        const under18 = new Date().getFullYear() - new Date(inputDate.current.value).getFullYear() < 18
+        const over90 = new Date().getFullYear() - new Date(inputDate.current.value).getFullYear() > 90
+        hobby.length <= 0 ? setHobbyError('No items selected') : setHobbyError('')
+        if(under18) setBirthdayError('Your age is under 18')
+        if(over90) setBirthdayError('Your age is over 90')
+        
+        if(!hobby.length <= 0 && !under18 && !over90){
+            console.log(e)
             dispatch(addPersonalInfoData({
                 firstName: firstName.current.value,
                 lastName: lastName.current.value,
@@ -38,41 +45,32 @@ const PersonalInfo = () => {
         dispatch(signUpStep('signUp'))
     }
 
-    const checkboxHandler = (el) =>{
-        if(el.target.checked){
-            setHobby([...hobby, el.target.value])
-        }else{
-            setHobby(hobby.filter(e => e !== el.target.value));
-        }
-    }
+    const checkboxHandler = (el) =>el.target.checked ? setHobby([...hobby, el.target.value]) : setHobby(hobby.filter(e => e !== el.target.value))
+
     return (
         <form onSubmit={validate} className={styles.personal_info_wrapper}>
 
-            <div className={styles.input_wrapper}>
-                <label className={styles.label} htmlFor="firstName">First Name</label>
-                <input
-                    className={styles.input}
-                    required={schema["firstName"]["required"]}
-                    type="text"
-                    placeholder="John"
-                    minLength={schema["firstName"]["minLength"]}
-                    maxLength={schema["firstName"]["maxLength"]}
-                    ref={firstName}
-                />
-            </div>
+            <Input
+                id='firstName'
+                label='First Name'
+                placeholder='John'
+                type='text'
+                required={schema["firstName"]["required"]}
+                ref={firstName}
+                minLength={schema["firstName"]["minLength"]}
+                maxLength={schema["firstName"]["maxLength"]}
+            />
 
-            <div className={styles.input_wrapper}>
-                <label className={styles.label} htmlFor="lastName">Last Name</label>
-                <input
-                    className={styles.input}
-                    required={schema["lastName"]["required"]}
-                    type="text"
-                    placeholder="Doe"
-                    minLength={schema["lastName"]["minLength"]}
-                    maxLength={schema["lastName"]["maxLength"]}
-                    ref={lastName}
-                />
-            </div>
+            <Input
+                id='lastName'
+                label='Last Name'
+                placeholder='Doe'
+                type='text'
+                required={schema["lastName"]["required"]}
+                ref={lastName}
+                minLength={schema["lastName"]["minLength"]}
+                maxLength={schema["lastName"]["maxLength"]}
+            />
 
             <div className={styles.radio_wrapper}>
                 <p>Sex</p>
@@ -102,23 +100,16 @@ const PersonalInfo = () => {
                     </div>
                 </div>
             </div>
-
-            <div className={styles.birthday_input_wrapper}>
-                <label className={styles.label} htmlFor="birthday">Birthday</label>
-                <input
-                    className={styles.birthday}
-                    ref={inputDate}
-                    required={schema["birthday"]["required"]}
-                    type="date"
-                    defaultValue="2000-01-01"
-                />
-            </div>
-            {new Date().getFullYear() - new Date(inputDate.current.value).getFullYear() < 18 &&
-                <span className={styles.error}>Your age is under 18</span>
-            }
-            {new Date().getFullYear() - new Date(inputDate.current.value).getFullYear() > 90 &&
-                <span className={styles.error}>Your age is over 90</span>
-            }
+            <Input
+                id='birthday'
+                label='Birthday'
+                type='date'
+                required={schema["birthday"]["required"]}
+                ref={inputDate}
+                defaultValue="2000-01-01"
+                error={birthdayError}
+            />
+            
             <div className={styles.select_wrapper}>
                 <p>Your Favorite Ocean</p>
                 <select required={schema["ocean"]["required"]} ref={inputOcean} >
@@ -146,7 +137,7 @@ const PersonalInfo = () => {
             <span className={styles.error}>{hobbyError}</span>
             <div className={styles.button_wrapper}>
                 <Button buttonName="Change SingUp" handler={backToSignUp}/>
-                <Button validateSignUp={validate} buttonName="Complete"/>
+                <Button buttonType={"submit"} buttonName="Complete"/>
             </div>
         </form>
     )

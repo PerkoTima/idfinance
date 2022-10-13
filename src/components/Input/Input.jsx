@@ -2,12 +2,12 @@ import React from "react";
 import styles from "./Input.module.scss"
 
 
-const Input = ({...props}) => {
+const Input = React.forwardRef((props,ref) => {
     return(
-        <div className={styles.input_wrapper}>
+        <div className={props.type === 'date' ? styles.birthday_input_wrapper : styles.input_wrapper}>
             <label className={styles.label} htmlFor={props.id}>{props.label}</label>
             <input
-                className={styles.input}
+                className={props.type === 'date' ? styles.birthday : styles.input}
                 onChange={props.onChange}
                 value={props.value}
                 required={props.required}
@@ -16,12 +16,14 @@ const Input = ({...props}) => {
                 id={props.id}
                 minLength={props.minLength}
                 maxLength={props.maxLength}
+                ref={ref}
+                defaultValue={props.defaultValue}
             />
             <div className={styles.error}>
                 {props.error}
             </div>
         </div>
     )
-}
+})
 
 export default Input
